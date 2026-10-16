@@ -133,6 +133,19 @@
   .case li::before { content: ""; position: absolute; left: 0; top: .78em; width: 10px; height: 2px; background: var(--lime); }
   .case-link { justify-self: start; font-weight: 600; text-decoration: none; color: var(--lime); border-bottom: 1px solid rgba(227,242,60,.35); padding-bottom: 2px; transition: border-color .2s ease-out; }
   .case-link:hover { border-color: var(--lime); }
+  /* компьютер: блок прилипает, колесо листает карточки вбок */
+  #works.pin { padding-block: 0; scroll-margin-top: var(--hdr); }
+  #works.pin > .wrap { position: sticky; top: var(--hdr); height: calc(100vh - var(--hdr)); display: flex; flex-direction: column; justify-content: center; }
+  #works.pin .sec-head { grid-template-columns: auto minmax(0, 1fr); align-items: end; column-gap: 40px; margin-bottom: 28px; }
+  #works.pin .sub { max-width: 46ch; }
+  #works.pin .cases { grid-auto-columns: min(880px, 72vw); overflow-x: hidden; scroll-snap-type: none; }
+  #works.pin .case { flex-direction: row; }
+  #works.pin .case-media { flex: 0 0 46%; aspect-ratio: auto; align-items: center; padding: 4%; border-bottom: 0; border-right: 1px solid var(--line); }
+  #works.pin .m-desk { width: 100%; }
+  #works.pin .case-res .m-phone { top: auto; bottom: 18%; width: 26%; }
+  #works.pin .case-edim .m-phone { width: 46%; }
+  #works.pin .case-vid .m-phone { width: 31%; }
+  #works.pin .case-body { align-content: center; padding: 28px 32px; }
 
   /* цены */
   .services { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
@@ -405,10 +418,25 @@
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.querySelectorAll('video[autoplay]').forEach(v => { v.removeAttribute('autoplay'); v.pause(); v.controls = true; });
   }
-  const cases = document.querySelector('.cases'), dots = document.querySelector('.dots');
+  const works = document.getElementById('works'), head = works.querySelector('.sec-head');
+  const cases = works.querySelector('.cases'), dots = works.querySelector('.dots');
   const step = () => cases.firstElementChild.offsetWidth + parseFloat(getComputedStyle(cases).columnGap);
   const max = () => cases.scrollWidth - cases.clientWidth;
-  const go = i => cases.scrollTo({ left: Math.max(0, Math.min(i * step(), max())), behavior: 'smooth' });
+  const wide = matchMedia('(min-width: 1000px)');
+  let pinned = false, hdr = 0;
+
+  // в режиме прилипания сдвиг ленты = насколько страницу прокрутили внутри блока
+  const pinY = () => works.getBoundingClientRect().top + scrollY - hdr;
+  function setLeft(left, smooth) {
+    left = Math.max(0, Math.min(left, max()));
+    const behavior = smooth ? 'smooth' : 'instant';
+    if (pinned) scrollTo({ top: pinY() + left, behavior });
+    else cases.scrollTo({ left, behavior });
+  }
+  const go = i => setLeft(i * step(), true);
+  function sync() {
+    if (pinned) cases.scrollLeft = Math.max(0, Math.min(max(), hdr - works.getBoundingClientRect().top));
+  }
 
   // точки = сколько раз лента реально может сдвинуться
   function mark() {
@@ -427,9 +455,26 @@
     dots.hidden = n < 2;
     mark();
   }
+
+  function layout() {
+    hdr = document.querySelector('.top').offsetHeight;
+    works.style.setProperty('--hdr', hdr + 'px');
+    works.style.height = '';
+    works.classList.toggle('pin', wide.matches);
+    // если карточки не влезают по высоте окна, остаётся обычная лента вбок
+    const need = cases.getBoundingClientRect().bottom - head.getBoundingClientRect().top + 56;
+    pinned = wide.matches && need <= innerHeight - hdr - 24;
+    works.classList.toggle('pin', pinned);
+    if (pinned) works.style.height = innerHeight - hdr + max() + 'px';
+    buildDots();
+    sync();
+  }
   cases.addEventListener('scroll', mark, { passive: true });
-  addEventListener('resize', buildDots);
-  buildDots();
+  addEventListener('scroll', sync, { passive: true });
+  addEventListener('resize', layout);
+  addEventListener('load', layout);
+  document.fonts.ready.then(layout);
+  layout();
 
   // мышью ленту тянут, как пальцем; тачпад и тач листают сами
   let x0 = 0, s0 = 0, dx = 0, down = false, dragging = false;
@@ -446,7 +491,7 @@
       cases.classList.add('drag');
       cases.setPointerCapture(e.pointerId);
     }
-    cases.scrollLeft = s0 - dx;
+    setLeft(s0 - dx, false);
   });
   const release = () => {
     if (!down) return;
