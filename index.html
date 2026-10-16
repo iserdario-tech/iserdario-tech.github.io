@@ -68,7 +68,7 @@
 
   section { padding-block: 104px; }
   .sec-head { display: grid; gap: 14px; margin-bottom: 48px; }
-  h2 { font-size: clamp(44px, 6vw, 84px); }
+  h2 { font-size: clamp(44px, 4.4vw, 64px); }
   .sub { color: var(--muted); max-width: 60ch; }
   .kicker, .tag, .when, .term { font: 500 13px/1.4 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; }
   .kicker { display: inline-flex; align-items: center; gap: 10px; color: var(--muted); letter-spacing: .08em; }
@@ -78,8 +78,8 @@
   .hero { padding-block: 72px 88px; }
   .hero-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 56px; align-items: center; }
   .hero-text { display: grid; gap: 24px; justify-items: start; min-width: 0; }
-  h1 { font-size: clamp(46px, 6vw, 86px); }
-  .lead { color: var(--muted); font-size: clamp(17px, 2vw, 20px); max-width: 56ch; }
+  h1 { font-size: clamp(46px, 4.6vw, 68px); }
+  .lead { color: var(--muted); font-size: clamp(17px, 1.4vw, 18px); max-width: 56ch; }
   .actions { display: flex; flex-wrap: wrap; gap: 12px; }
   .hero-visual { position: relative; aspect-ratio: 1 / .86; max-width: 100%; perspective: 1600px; }
   .hero-visual::before { content: ""; position: absolute; inset: 10% 0 0 10%; border-radius: 50%; background: radial-gradient(closest-side, rgba(227,242,60,.28), transparent); filter: blur(20px); }
@@ -91,23 +91,25 @@
   .hv-stage .hv-phone { right: 4%; bottom: 0; width: 24%; border-radius: 22px; transform: translateZ(80px); }
   .facts { grid-column: 1 / -1; list-style: none; margin: 0; padding: 32px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; border-top: 1px solid var(--line); }
   .facts li { color: var(--muted); font-size: 15px; line-height: 1.5; }
-  .facts b { display: block; margin-bottom: 8px; font: 800 clamp(30px, 3.2vw, 44px)/1 var(--f-display); text-transform: uppercase; color: var(--lime); }
+  .facts b { display: block; margin-bottom: 8px; font: 800 clamp(30px, 2.6vw, 36px)/1 var(--f-display); text-transform: uppercase; color: var(--lime); }
 
   /* бегущая лента */
   .marquee { overflow: hidden; padding-block: 24px; }
   .mq-band { margin-inline: -40px; background: var(--lime); color: var(--lime-ink); transform: rotate(-2deg); }
   .mq-track { display: flex; width: max-content; animation: mq 38s linear infinite; }
-  .mq-track span { display: flex; align-items: center; gap: 28px; margin-right: 28px; padding-block: 16px; font: 800 clamp(26px, 3vw, 38px)/1 var(--f-display); text-transform: uppercase; white-space: nowrap; }
+  .mq-track span { display: flex; align-items: center; gap: 28px; margin-right: 28px; padding-block: 16px; font: 800 clamp(26px, 2.4vw, 30px)/1 var(--f-display); text-transform: uppercase; white-space: nowrap; }
   .mq-track span::after { content: "✦"; font-size: .6em; }
   @keyframes mq { to { transform: translateX(-50%); } }
 
   /* работы: карусель карточек */
-  #works .sec-head { grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
-  #works .sub { grid-column: 1; }
-  .scroll-ctrl { display: flex; gap: 8px; grid-column: 2; grid-row: 1 / 3; }
-  .scroll-ctrl button { width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--line); background: var(--glass); color: var(--fg); font-size: 20px; cursor: pointer; transition: background-color .2s ease-out, color .2s ease-out; }
-  .scroll-ctrl button:hover { background: var(--lime); color: var(--lime-ink); }
-  .cases { display: grid; grid-auto-flow: column; grid-auto-columns: min(86%, 540px); gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 20px; scrollbar-color: var(--lime) transparent; overscroll-behavior-x: contain; }
+  .cases { display: grid; grid-auto-flow: column; grid-auto-columns: min(86%, 460px); gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain;
+    cursor: grab; -webkit-user-select: none; user-select: none; }
+  .cases::-webkit-scrollbar { display: none; }
+  .cases.drag { cursor: grabbing; scroll-snap-type: none; }
+  .dots { display: flex; justify-content: center; gap: 2px; margin-top: 16px; }
+  .dots button { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 0; background: none; cursor: pointer; }
+  .dots button::before { content: ""; width: 8px; height: 8px; border-radius: 99px; background: rgba(255,255,255,.28); transition: width .25s ease-out, background-color .25s ease-out; }
+  .dots button[aria-current="true"]::before { width: 24px; background: var(--lime); }
   .case { scroll-snap-align: start; display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: var(--r); background: var(--glass); overflow: hidden; }
   .case, .case > *, .case-body > * { min-width: 0; }
   .case-media { position: relative; display: flex; justify-content: center; align-items: flex-start; gap: 3%; padding: 6% 6% 0;
@@ -124,7 +126,7 @@
   .case-body { display: grid; gap: 18px; align-content: start; padding: 28px; }
   .cb-head, .cb-list { display: grid; gap: 14px; align-content: start; }
   .tag { color: var(--lime); }
-  .case h3 { font-size: clamp(30px, 3vw, 40px); }
+  .case h3 { font-size: clamp(30px, 2.4vw, 32px); }
   .desc { color: var(--muted); }
   .case ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
   .case li { position: relative; padding-left: 22px; }
@@ -146,13 +148,13 @@
   /* как работаем */
   .steps { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
   .steps li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 8px 40px; padding-block: 32px; border-bottom: 1px solid var(--line); align-items: baseline; }
-  .steps .when { grid-row: 1 / 3; font: 800 clamp(44px, 6vw, 88px)/.9 var(--f-display); letter-spacing: 0; color: var(--lime); }
+  .steps .when { grid-row: 1 / 3; font: 800 clamp(44px, 4.4vw, 66px)/.9 var(--f-display); letter-spacing: 0; color: var(--lime); }
   .steps b { font-size: 20px; font-weight: 600; }
   .steps li > span:last-child { color: var(--muted); }
 
   .contact { background: var(--lime); color: var(--lime-ink); padding-block: 120px; text-align: center; }
   .contact .wrap { display: grid; justify-items: center; gap: 20px; }
-  .contact h2 { font-size: clamp(48px, 8vw, 120px); }
+  .contact h2 { font-size: clamp(48px, 6vw, 92px); }
   .contact .sub { color: var(--lime-ink); opacity: .75; }
   .contact .btn-lime { background: var(--lime-ink); color: var(--lime); }
   .contact .btn-lime:hover { box-shadow: 0 12px 32px rgba(21,23,11,.3); }
@@ -160,6 +162,16 @@
   footer { color: var(--muted); font-size: 14px; }
   footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding-block: 28px 40px; }
 
+  @media (min-width: 1100px) {
+    body { font-size: 16px; }
+    section { padding-block: 80px; }
+    .hero { padding-block: 56px 72px; }
+    .contact { padding-block: 96px; }
+    .sec-head { margin-bottom: 40px; }
+    .case-body, .service { padding: 24px; }
+    .service h3 { font-size: 28px; }
+    .price { font-size: 30px; }
+  }
   @media (max-width: 1000px) { .services { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 860px) {
     .hero-grid, .facts, .steps li { grid-template-columns: 1fr; }
@@ -168,7 +180,7 @@
     .hv-stage { transform: rotateY(-10deg) rotateX(6deg); }
   }
   @media (max-width: 760px) { .top nav { display: none; } .top .btn { margin-left: auto; } }
-  @media (max-width: 600px) { .services { grid-template-columns: 1fr; } .scroll-ctrl { display: none; } }
+  @media (max-width: 600px) { .services { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -231,10 +243,6 @@
       <div class="sec-head">
         <h2>Работы</h2>
         <p class="sub">Один проект для заказчика и три собственных продукта, которыми пользуются люди.</p>
-        <div class="scroll-ctrl">
-          <button type="button" data-dir="-1" aria-label="Предыдущая работа">←</button>
-          <button type="button" data-dir="1" aria-label="Следующая работа">→</button>
-        </div>
       </div>
       <div class="cases" role="region" aria-label="Работы, листаются вбок" tabindex="0">
         <article class="case case-res">
@@ -324,6 +332,7 @@
           </div>
         </article>
       </div>
+      <div class="dots" role="group" aria-label="Листать работы"></div>
     </div>
   </section>
 
@@ -396,9 +405,65 @@
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.querySelectorAll('video[autoplay]').forEach(v => { v.removeAttribute('autoplay'); v.pause(); v.controls = true; });
   }
-  const cases = document.querySelector('.cases');
-  document.querySelectorAll('.scroll-ctrl button').forEach(b => b.addEventListener('click', () =>
-    cases.scrollBy({ left: +b.dataset.dir * (cases.firstElementChild.offsetWidth + 20), behavior: 'smooth' })));
+  const cases = document.querySelector('.cases'), dots = document.querySelector('.dots');
+  const step = () => cases.firstElementChild.offsetWidth + parseFloat(getComputedStyle(cases).columnGap);
+  const max = () => cases.scrollWidth - cases.clientWidth;
+  const go = i => cases.scrollTo({ left: Math.max(0, Math.min(i * step(), max())), behavior: 'smooth' });
+
+  // точки = сколько раз лента реально может сдвинуться
+  function mark() {
+    const n = dots.children.length, i = cases.scrollLeft >= max() - 2 ? n - 1 : Math.round(cases.scrollLeft / step());
+    [...dots.children].forEach((b, k) => b.setAttribute('aria-current', k === i));
+  }
+  function buildDots() {
+    const n = Math.max(1, Math.ceil((max() - 2) / step()) + 1);
+    dots.replaceChildren(...Array.from({ length: n }, (_, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', `Работы, ${i + 1} из ${n}`);
+      b.addEventListener('click', () => go(i));
+      return b;
+    }));
+    dots.hidden = n < 2;
+    mark();
+  }
+  cases.addEventListener('scroll', mark, { passive: true });
+  addEventListener('resize', buildDots);
+  buildDots();
+
+  // мышью ленту тянут, как пальцем; тачпад и тач листают сами
+  let x0 = 0, s0 = 0, dx = 0, down = false, dragging = false;
+  cases.addEventListener('pointerdown', e => {
+    if (e.pointerType !== 'mouse' || e.button) return;
+    down = true; dragging = false; dx = 0; x0 = e.clientX; s0 = cases.scrollLeft;
+  });
+  cases.addEventListener('pointermove', e => {
+    if (!down) return;
+    dx = e.clientX - x0;
+    if (!dragging) {
+      if (Math.abs(dx) < 6) return;
+      dragging = true;
+      cases.classList.add('drag');
+      cases.setPointerCapture(e.pointerId);
+    }
+    cases.scrollLeft = s0 - dx;
+  });
+  const release = () => {
+    if (!down) return;
+    down = false;
+    if (!dragging) return;
+    dragging = false;
+    go(Math.round(cases.scrollLeft / step() + (dx < 0 ? .3 : -.3))); // короткий рывок уже листает на карточку
+    // примагничивание включаем, только когда лента докрутилась, иначе она отскочит назад
+    const done = () => { if (!down) cases.classList.remove('drag'); };
+    cases.addEventListener('scrollend', done, { once: true });
+    setTimeout(done, 800);
+  };
+  cases.addEventListener('pointerup', release);
+  cases.addEventListener('pointercancel', release);
+  // после перетаскивания ссылка в карточке не срабатывает
+  cases.addEventListener('click', e => { if (Math.abs(dx) >= 6) { e.preventDefault(); e.stopPropagation(); dx = 0; } }, true);
+  cases.addEventListener('dragstart', e => e.preventDefault());
 </script>
 </body>
 </html>
